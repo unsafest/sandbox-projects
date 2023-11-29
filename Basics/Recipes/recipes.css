@@ -1,0 +1,33 @@
+h1 {
+    text-align: center;
+}
+.container {
+    display: flex; /* Make the container a flexbox */
+    flex-wrap: wrap; /* Wrap the flex items to the next line if they exceed the container width */
+    justify-content: center; /* Center the flex items horizontally */
+}
+.recipe-card {
+    width: 300px; /* Adjust the width as per your requirement */
+    height: 400px; /* Adjust the height as per your requirement */
+    display: inline-block; /* Make the recipe cards appear next to each other */
+    margin-right: 10px; /* Add some spacing between the cards */
+    text-align: center; /* Align the text to the center */
+    
+}
+.recipe-card img {
+    max-width: 100%; /* Set the maximum width of the image to 100% of the recipe card */
+    max-height: 100%; /* Set the maximum height of the image to 100% of the recipe card */
+    object-fit: contain; /* Maintain the aspect ratio of the image and fit it within the container */
+    border-radius: 10px; /* Add a border radius to the image */
+}
+.recipe img{
+    width: 300px;
+    height: 400px;
+    border-radius: 10px;
+    float: right;
+
+}
+a {
+    text-decoration: none; /* Remove the underline from the links */
+    color: inherit; /* Inherit the color from the parent element */
+}
