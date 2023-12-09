@@ -88,9 +88,11 @@ h1 {
     font-size: 20px;
     border: none;
 }
+
 #reset:hover {
     background-color: seashell;
 }
+
 #reset:active {
     background-color: seashell;
 }
