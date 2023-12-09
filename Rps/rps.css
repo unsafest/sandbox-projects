@@ -1,0 +1,123 @@
+body {
+    background-color: rgb(35, 51, 44);
+    color: rgb(255, 255, 255);
+    line-height: 1.5;
+    font-family: "Pixel", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(20, 31, 26);
+}
+
+h1 {
+    color: #ffde34;
+    font-size: 60px;
+}
+
+.scoreboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center; 
+}
+    
+.score-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 400px;
+    padding: 10px;
+    margin: 0 auto;
+    gap: 40px;
+}
+
+.player-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.player-chose, .computer-chose {
+    font-size: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.rps-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+}
+.rps-button {
+    background-color: rgb(34, 46, 40);
+    border: none;
+    border-radius: 10px;
+    font-size: 100px;
+}
+.rps-button:hover {
+    background-color: rgba(35, 48, 42);
+}
+
+.rps-button:active {
+    background-color: rgba(35, 48, 42, 0.671);
+}
+
+#reset {
+    border-radius: 5px;
+    padding: 20px;
+    margin: auto;
+    display: block;
+    font-size: 20px;
+    border: none;
+}
+#reset:hover {
+    background-color: seashell;
+}
+#reset:active {
+    background-color: seashell;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 40px;
+    }
+
+    .score-container {
+        
+        gap: 20px;
+    }
+
+    .player-box {
+        font-size: 16px;
+    }
+
+    .player-chose, .computer-chose {
+        font-size: 30px;
+    }
+
+    .rps-button {
+        font-size: 50px;
+    }
+
+    #reset {
+        font-size: 16px;
+    }
+}

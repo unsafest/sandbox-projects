@@ -16,17 +16,19 @@ function getPlayerChoice(choice) {
 
 function game() {
     let computerChoice = getComputerChoice();
-    playRound(playerChoice, getComputerChoice());
+    playRound(playerChoice, computerChoice);
 
     if (playerScore >= 5 || computerScore >=5) {
         updateUI(playerScore, computerScore, playerChoice, computerChoice);
+        document.getElementById("reset").innerHTML = "Play again?";
         
+        // Let the UI update before the alert
         setTimeout(() => {
             if (playerScore > computerScore) {
-                alert("you win");
+                document.querySelector('h2').textContent = "🎉 Player wins! 🎉";
             }
             else {
-                alert("computer wins");
+                document.querySelector('h2').textContent = "Computer wins!";
             }
         }, 100);
     }
@@ -49,7 +51,19 @@ function playRound(playerSelection, computerSelection) {
         computerScore++;
     }
     updateUI(playerScore, computerScore, playerSelection, computerSelection);
-    return roundWinner;
+    displayRoundWinner(roundWinner, playerSelection, computerSelection);
+}
+
+function displayRoundWinner(roundWinner, playerSelection, computerSelection) {
+    if (roundWinner === "player") {
+        document.querySelector('h3').textContent = `${playerSelection} beats ${computerSelection}`;
+    }
+    else if (roundWinner === "computer") {
+        document.querySelector('h3').textContent = `${playerSelection} is beaten by ${computerSelection}`;
+    }
+    else {
+        document.querySelector('h3').textContent = `${playerSelection} ties with ${computerSelection}`;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,6 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
+            // if either score has reached 5, don't play a new round
+            if (playerScore >= 5 || computerScore >= 5) {
+                return;
+            }
             getPlayerChoice(button.id);
             game();
         })
@@ -88,6 +106,19 @@ function updateChoices(playerChoice, computerChoice){
 
     playerBoxEmoji.textContent = choiceToEmoji[playerChoice];
     computerBoxEmoji.textContent = choiceToEmoji[computerChoice];
+}
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    roundWinner = undefined;
+    playerChoice = undefined;
+    document.querySelector('.player-chose').textContent = '❔';
+    document.querySelector('.computer-chose').textContent = '❔';
+    document.querySelector('h3').textContent = 'Best of five';
+    document.querySelector('h2').textContent = 'You know what to do! 👇';
+    document.getElementById("reset").innerHTML = "Reset";
+    updateScore(0, 0);
 }
 
 // Path: Rps/rps.html
