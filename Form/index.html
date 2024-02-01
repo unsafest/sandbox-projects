@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up page for Aviato</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <div class="left">
+        <img class="bg" src="bg.jpg" alt="Gree scenery of mountains and lake">
+        <img class="logo" src="aviato.png" alt="Aviato logo">
+    </div>
+    <div class="right">
+        <div class="Description">
+            <h1>Sign up now and get started</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum in nisl sit amet fermentum. Fusce risus enim, 
+                consectetur ac lorem sit amet, dictum blandit orci. Integer porttitor augue ac nulla ullamcorper, interdum elementum 
+                risus auctor. Donec vitae molestie nibh.  
+            </p>
+            <p>On time allways!</p>
+        </div>
+        <form id="form" action="/" method="GET" novalidate>
+            <div class="input-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" required pattern="[A-Za-z]+">
+                <span class="error-message" id="first_name_error"></span>
+        
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" required pattern="[A-Za-z]+">
+                <span class="error-message" id="last_name_error"></span>
+        
+                <label for="email">E-mail</label>
+                <input type="email" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <span class="error-message" id="email_error"></span>
+            </div>
+            <div class="input-group">    
+                <label for="password">Password</label>
+                <input type="password" id="password" required pattern=".{6,24}">
+                <span class="error-message" id="password_error"></span>
+        
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" required pattern=".{6,24}"> 
+                <span class="error-message" id="confirm_password_error"></span>
+            </div>
+        </form>
+        <div class="submit">
+            <button type="submit" value="Register" form="form" id="submit">Sign up</button>
+            <p>Already have an account? <a href="#">Login</a></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
