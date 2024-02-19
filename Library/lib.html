@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Book library</title>
+        <meta name="description" content="Book library">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="lib.css">
+    </head>
+    <body>
+        <h>Library</h>
+        <button id="showDialog">Add new book +</button>
+
+        <div class="book-grid"></div>
+
+        <dialog id="newBookDialog">
+            <form id="newBookForm">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" required>
+
+                <label for="pages">Pages</label>
+                <input type="number" id="pages" name="pages" required>
+
+                <label for="read">Read</label>
+                <input type="checkbox" id="read" name="read">
+
+                <button id="submit" value="default" onclick="addBookToLibrary(event)">Add</button>
+                <button id="cancel" value="cancel" formmethod="dialog">Cancel</button>
+            </form>
+        </dialog>
+
+        
+        <script src="lib.js"></script>
+    </body>
+</html>
