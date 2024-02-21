@@ -2,15 +2,19 @@ const showDialog = document.getElementById("showDialog");
 const newBookDialog = document.getElementById("newBookDialog");
 const cancel = document.getElementById("cancel");
 
-const book1 = new Book("book1", "author1", 52, true); 
-const book2 = new Book("book2", "author2", 52, false);
-const book3 = new Book("book3", "author3", 52, true);
-const book4 = new Book("book4", "author4", 52, false);
-const book5 = new Book("book5", "author5", 52, true);
+const book1 = new Book("Me before you", "Jojo Moyes", 494, false); 
+const book2 = new Book("The night manager", "John le Carre", 483, false);
+const book3 = new Book("This is it", "Alan Watts", 158, true);
+const book4 = new Book("What every body is saying", "Joe Navarro", 250, true);
+const book5 = new Book("The art of war", "Sun Tzu", 100, false);
 
 const myLibrary = [book1, book2, book3, book4, book5];
 
 console.log(book1.info());
+
+window.onload = function() {
+    render();
+}
 
 showDialog.addEventListener("click", () => {
     newBookDialog.showModal();
@@ -48,19 +52,26 @@ function deleteBook(index) {
     render();
 }
 
+Book.prototype.toggleReadStatus = function() {
+    this.read = !this.read;
+}
+
+window.toggleReadStatus = function(index) {
+    myLibrary[index].toggleReadStatus();
+    render();
+}
+
+
 function render() {
     const bookGrid = document.querySelector(".book-grid");
     bookGrid.innerHTML = myLibrary.map((book, index) => 
         `<div class="book">
-            <table>
-                <tr>
-                    <td>${book.title}</td>
-                    <td>by ${book.author}</td>
-                    <td>${book.pages} pages</td>
-                    <td>${book.read ? 'Read' : 'Not read yet'}</td>
-                    <button onclick="deleteBook(${index})"🗑️</button>
-                </tr>
-            </table>
+            <p>${book.title}</p>
+            <p>by ${book.author}</p>
+            <p>${book.pages} pages</p>
+            <p><input type="checkbox" id="read" name="read" ${book.read ? "checked" : ""} 
+                onclick="toggleReadStatus(${index})">${book.read ? "Read" : "Not read yet"}</p>
+            <button onclick="deleteBook(${index})">🗑️</button>
         </div>`
     ).join("");
 }
