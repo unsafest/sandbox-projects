@@ -1,4 +1,4 @@
-import { key } from '/weatherKey.js';
+import { key } from './weatherKey.js';
 
 fetch(`https://api.weatherapi.com/v1/current.json?key=${key}=london`,{ mode: 'cors'})
     .then(function(response) {
