@@ -10,11 +10,24 @@
     </head>
     <body>
         <input type="text" class="input" id="city" placeholder="City">
-        <button class="button" id="search">Search</button>
+        <button class="city-button" id="search">Search</button>
 
-
+        <div class="response-container">
+            <div class="response" id="Location"></div>
+            <div class="response" id="Temperature"></div>
+            <div class="response" id="Wind"></div>
+            <div class="response" id="Humidity"></div>
+            <div class="response" id="FeelsLike"></div>
+            <div class="response" id="Condition"></div>
+            <div class="response">
+                <img src="" id="Icon">
+            </div>
+            <div class="response">
+                <img src="" id="gif">
+            </div>
+        </div>
         
-        <script src="weather.js"></script>
+        <script type="module" src="weather.js"></script>
     </body>
 
 </html>
