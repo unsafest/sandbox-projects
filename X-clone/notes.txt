@@ -1,0 +1,12 @@
+Project Overview 
+
+Features
+    * Public: View all posts (GET /posts), view specific post (GET /posts/:id)
+    * Authenticated Users: Create (POST /posts), Update (PUT /posts/:id), Delete (DELETE /posts/:id)
+
+Tech Stack: Node.js, Express.js, SQLite, basic authentication 
+
+Output: JOSN response
+
+Notes
+    * authentication: This uses a simple JWT token tied to user_token. 
