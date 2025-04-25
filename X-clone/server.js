@@ -1,7 +1,10 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
+const jwt = require('jsonwebtoken');
+
 const app = express();
 const port = 4000;
+const JWT_SECRET = 'giga_secret_key_123'
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -12,53 +15,62 @@ const db = new sqlite3.Database('./Xdatabase.db', (err) => {
     else console.log('Connected to SQLite database');
 });
 
-// Middleware for Authentication
+// Middleware for Authentication (JWT)
 const authentication = (req, res, next) => {
     // Extrach the Authorization Header
     const authHeader = req.headers['authorization'];
     // Check if the Header exists and is valid--follows HTTP Basic Auth format
-    if (!authHeader || !authHeader.startsWith('Basic ')) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         // 401 Unauthorized
-        return res.status(401).json({ message: 'Invalid user'});
+        return res.status(401).json({ message: 'Invalid user' });
     }
-    // Extract the Base64 Token
-    const base64Token = authHeader.split(' ')[1];
-    // Decode the Base64 Token
-    let userToken;
-    // Decoding can fail, and if it does, it throws an error that would crash the server in not caught
     try {
-        // Convers the Basic64 string into binary buffer, then converts the 
-        // buffer to utf8 string--giving original token
-        userToken = Buffer.from(base64Token, 'base64').toString('utf8');
-        // Try/cath handles malformed Base64 string 
-    } catch (err) {
-        // 400 Bad Request
-        return res.status(400).json({ message: 'Invalid Base64 token'});
-    }
-    // Query the Databse for user id with the token
-    db.get(`SELECT user_id FROM users WHERE user_token = ?`, 
-    [userToken], (err, row) => {
-        // Handle Database errors
-        if (err) {
-            // 500 Internal Seerver Error
-            return res.status(500).json({ message: 'Database error'});
-        }
-        // Check if user exists
-        if (!row) {
-            // 401 Unauthorized
-            return res.status(401).json({ message: 'Invalid user'});
-        }
-        // Attach the User (id) to the request object for use in the route handler
-        // This identifies the authenticated user, ensuring actions are tied to them
-        req.user = { user_id: row.user_id }; // req.user becomes { user_id: n }
-        // Passes controll to the next middleware or the route handler
+        const token = authHeader.split(' ')[1];
+        let userToken = jwt.verify(token, JWT_SECRET);
+        req.user = { user_id: userToken.user_id };
         next();
-    });  
+    } catch (err) {
+        console.error('JWT verification error: ', err);
+        res.status(401).json({ message: 'Invalid user' });
+    }
+}
+
+const authorization = (req, res, next) => {
+    const postID = req.params.id;
+    db.get('SELECT post_user_id FROM posts WHERE post_id = ?', 
+        [postID], 
+        (err, row) => {
+            if (err) {
+                console.error('Database error in authorizePost: ', err);
+                return res.status(500).json({ error: 'Database error'});
+            }
+            if (!row) {
+                return res.status(401).json({ message: 'Invalid user'});
+            }
+            if (row.post_user_id !== req.user.user_id) {
+                return res.status(401).json({ message: 'Unauthorized'});
+            }
+            next();
+        }
+    );
 }
 
 // PUBLIC ROUTES
 
-app.get('/', (req, res) => {
+app.get('/token', (req, res) => {
+    db.get(
+        `SELECT user_id FROM users WHERE user_token = ?`,
+         ['token123'],
+         (err, row) => {
+            if (err) return res.status(500).json({ error: 'Database error'});
+            if (!row) return res.status(401).json({ error: 'Invalid user'});
+            const token = jwt.sign({ user_id: row.user_id }, JWT_SECRET, { expiresIn: '1h' });
+            res.status(200).json({ token });
+         }
+    );
+})
+
+app.get('/', (req, res) => { 
     res.redirect('/posts');
 });
 
@@ -122,7 +134,7 @@ app.post('/posts/create', authentication, (req, res) => {
     });
 });
 // Update a post
-app.put('/posts/edit/:id', authentication, (req, res) => {
+app.put('/posts/edit/:id', authentication, authorization, (req, res) => {
     // Extract Post ID from the URL -- req.params.id get :id form the URL
     const { id } = req.params;  
     // Extract New Post content from the request body
@@ -131,53 +143,41 @@ app.put('/posts/edit/:id', authentication, (req, res) => {
     if (!post_body) return res.status(400).json({ error: 'Post body required'});
     // Get User ID form the authenticated user
     const user_id = req.user.user_id;
-    // Check Post Ownership
-    db.get('SELECT post_user_id FROM posts WHERE post_id = ?', 
-        [id], (err, row) => {
-        // 500 Internal Server Error
-        if (err) return res.status(500).json({ error: 'Database error'});
-        // 404 Not Found
-        if (!row) return res.status(404).json({ error: 'Post not found'});
-        // 401 Unauthorized -- Authorization Check -- Ensure the user is the owner of the post
-        if (row.post_user_id !== user_id) return res.status(401).json({ error: 'You don\'t have access to this post'})
-        // Update the post
-            db.run(`UPDATE posts SET post_body = ? WHERE post_id = ?`,
-            [post_body, id], function (err) {
-                // 500 Internal Server Error
-                if (err) return res.status(500).json({ error: 'Database error'});
-                // 200 OK
-                res.status(200).json({
-                    post_id: id,
-                    post_user_id: user_id.toString(),
-                    post_body: post_body
-                });
-        });
-    });
-}); 
-// Delete a post
-app.delete('/posts/delete/:id', authentication, (req, res) => {
-    // Extract Post ID from the URL
-    const { id } = req.params;
-    // Get User ID from the authenticated user
-    const user_id = req.user.user_id;
-    // Check Post Ownership
-    db.get('SELECT post_user_id FROM posts WHERE post_id = ?',
-        [id], (err, row) => {
+   
+    // Update the post
+    db.run(`UPDATE posts SET post_body = ? WHERE post_id = ?`,
+        [post_body, id], function (err) {
             // 500 Internal Server Error
             if (err) return res.status(500).json({ error: 'Database error'});
-            // 404 Not found
-            if (!row) return res.status(404).json({ error: 'Post not found'});
-            // 401 Unauthorized -- Authorization Check
-            if (row.post_user_id !== user_id) return res.status(401).json({ error: 'You don\'t have access to this post'});
-            // Delete the post
-                db.run(`DELETE FROM posts WHERE post_id = ?`, 
-                [id], function (err) {
-                    // 500 Internal Server Error
-                    if (err) return res.status(500).json({ error: 'Databse error'});
-                    // 200 OK
-                    res.status(200).json({ message: 'Post deleted'});
+            if (this.changes === 0) {
+                return res.status(404).json({ error: 'Post not found'});
+            }
+            // 200 OK
+            res.status(200).json({
+                post_id: id,
+                post_user_id: user_id.toString(),
+                post_body: post_body
             });
-        });
+        }
+    );
+}); 
+// Delete a post
+app.delete('/posts/delete/:id', authentication, authorization, (req, res) => {
+    // Extract Post ID from the URL
+    const id = req.params.id;
+    
+    // Delete the post
+    db.run(`DELETE FROM posts WHERE post_id = ?`, 
+        [id], function (err) {
+            // 500 Internal Server Error
+            if (err) return res.status(500).json({ error: 'Databse error'});
+            if (this.changes === 0) {
+                return res.status(404).json({ error: 'Post not found'});
+            }
+            // 200 OK
+            res.status(200).json({ message: 'Post deleted'});
+        }
+    );
 });
 
 // Start the server
