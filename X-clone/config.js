@@ -1,0 +1,1 @@
+export const JWT_SECRET = process.env.JWT_SECRET || 'giga-secret_key_123';
