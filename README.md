@@ -12,7 +12,6 @@ This repository contains a collection of small web projects and experiments, inc
 - **Rps**: Rock Paper Scissors game.
 - **Shopping-list-app**: Shopping list app using Firebase.
 - **Weather**: Weather app with Giphy integration.
-- **X-clone**: Node.js/Express backend for a simple social media clone.
 
 ## Getting Started
 
