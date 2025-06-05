@@ -4,3 +4,5 @@ weatherKey.js
 #ignore giphyKey file 
 giphyKey.js
 
+#ignre X-clone, duplicate, has its own repo
+X-clone/
