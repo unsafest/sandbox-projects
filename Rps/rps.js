@@ -1,8 +1,9 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    let playerScore = 0;
-    let computerScore = 0;
-    let roundWinner = undefined;
-    let playerChoice = undefined;
+let playerScore = 0;
+let computerScore = 0;
+let roundWinner = undefined;
+let playerChoice = undefined;
+
+document.addEventListener('DOMContentLoaded', () => {
     
     function getComputerChoice() {
         const rps = ["rock", "paper", "scissors"];
@@ -66,21 +67,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelector('h3').textContent = `${playerSelection} ties with ${computerSelection}`;
         }
     }
+
+    const buttons = document.querySelectorAll(".rps-button");
     
-    document.addEventListener("DOMContentLoaded", () => {
-        const buttons = document.querySelectorAll(".rps-button");
-    
-        buttons.forEach(button => {
-            button.addEventListener("click", () => {
-                // if either score has reached 5, don't play a new round
-                if (playerScore >= 5 || computerScore >= 5) {
-                    return;
-                }
-                getPlayerChoice(button.id);
-                game();
-            })
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            // if either score has reached 5, don't play a new round
+            if (playerScore >= 5 || computerScore >= 5) {
+                return;
+            }
+            getPlayerChoice(button.id);
+            game();
         })
     });
+
     
     function updateUI(playerScore, computerScore, playerChoice, computerChoice) {
         updateScore(playerScore, computerScore);
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const computerScoreElement = document.querySelector('#computerScore');
     
         playerScoreElement.textContent = `Player: ${playerScore}`;
-        computerScoreElement.textContent = `Compuer: ${computerScore}`;
+        computerScoreElement.textContent = `Computer: ${computerScore}`;
     }
     
     function updateChoices(playerChoice, computerChoice){
@@ -121,6 +121,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById("reset").innerHTML = "Reset";
         updateScore(0, 0);
     } 
+
+    document.getElementById("reset").addEventListener("click", resetGame);
 });
 
 // Path: Rps/rps.html

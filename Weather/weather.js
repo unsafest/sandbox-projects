@@ -4,12 +4,22 @@ import { giphyKey } from './giphyKey.js';
 function processWeatherData(response) {
     return {
         Location: response.location.name,
-        Temperature: response.current.temp_c + "°C",
-        Wind: response.current.wind_kph + " km/h",
-        Humidity: response.current.humidity + "%",
-        FeelsLike: response.current.feelslike_c + "°C",
+        Temperature: response.current.temp_c + "°C", 
+        Wind: "Wind - " + response.current.wind_kph + " km/h  🧭 " + response.current.wind_dir,
+        Humidity: "Humidity - " + response.current.humidity + "%",
+        FeelsLike: "Feels like - " + response.current.feelslike_c + "°C",
         Condition: response.current.condition.text,
         Icon: response.current.condition.icon,
+        //More
+        WindDirection:"Wind direction - °" + response.current.wind_degree + " (" + response.current.wind_dir + ")",
+        WindChill: "Wind chill - " + response.current.windchill_c + "°C",
+        Precipitation: "Precipitation - " + response.current.precip_mm + " mm",
+        Pressure: "Pressure - " + response.current.pressure_mb + " mb",
+        Gusts: "Wind gusts - " + response.current.gust_kph + " km/h",
+        UV: "UV Index - " + response.current.uv,
+        Visibility: "Visibility - " + response.current.vis_km + " km",
+        Cloud: "Cloud cover - " + response.current.cloud + "%",
+
     }
 }
 
@@ -66,4 +76,21 @@ function getGif(condition) {
 document.querySelector(".city-button").addEventListener("click", function() {
     let location = document.querySelector(".input").value;
     getWeather(location);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const moreBtn = document.getElementById("more-btn");
+    const moreInfo = document.getElementById("more-info");
+
+    moreBtn.addEventListener("click", () => {
+        const isHidden = moreInfo.classList.contains("hidden");
+        if (isHidden) {
+            moreInfo.classList.remove("hidden");
+            moreBtn.textContent = "Show Less";
+        } 
+        else {
+            moreInfo.classList.add("hidden");
+            moreBtn.textContent = "Show More";
+        }
+    })
 });

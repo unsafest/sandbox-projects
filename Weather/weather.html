@@ -7,25 +7,46 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="weather.css">
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
     </head>
     <body>
+        <h2>Todays weather</h2>
+        <p>Enter a city to get the current weather information</p>
         <input type="text" class="input" id="city" placeholder="City">
         <button class="city-button" id="search">Search</button>
 
-        <div class="response-container">
-            <div class="response" id="Location"></div>
-            <div class="response" id="Temperature"></div>
-            <div class="response" id="Wind"></div>
-            <div class="response" id="Humidity"></div>
-            <div class="response" id="FeelsLike"></div>
-            <div class="response" id="Condition"></div>
-            <div class="response">
-                <img src="" id="Icon">
+        <main style="display: flex; justify-content: space-between; align-items: start; ">
+            <div class="response-container" style="flex:1; min-width:30%">
+                <div class="response" id="Location" style="font-weight: bold;"></div>
+                <div class="response" id="Temperature"></div>
+                <div class="response" id="Wind"></div>
+                <div class="response" id="Humidity"></div>
+                <div class="response" id="FeelsLike"></div>
+                <div class="response" id="Condition"></div>
+                <div class="response">
+                    <img src="" id="Icon">
+                </div>
+
+                <!-- More button -->
+                <button id="more-btn">Show More</button>
+
+                <!-- Additional weather info (hidden by default) -->
+                <div id="more-info" class="more-info hidden">
+                    <div class="response" id="WindDirection"></div>
+                    <div class="response" id="WindChill"></div>
+                    <div class="response" id="Precipitation"></div>
+                    <div class="response" id="Pressure"></div>
+                    <div class="response" id="Gusts"></div>
+                    <div class="response" id="UV"></div>
+                    <div class="response" id="Visibility"></div>
+                    <div class="response" id="Cloud"></div>
+                </div>
+
             </div>
-            <div class="response">
+            <div class="response" style="flex:1; max-width:70%">
                 <img src="" id="gif">
             </div>
-        </div>
+        </main>
         
         <script type="module" src="weather.js"></script>
     </body>
