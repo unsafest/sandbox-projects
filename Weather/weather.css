@@ -1,6 +1,9 @@
 .hidden {
     display: none;
 }
+.hidden-btn {
+    display: none;
+}
 .more-info {
     margin-top: 1rem;
 }

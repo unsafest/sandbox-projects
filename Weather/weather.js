@@ -44,7 +44,11 @@ function getWeather(location){
                         element.innerHTML = response[key];
                     }
                 }
-            })
+            });
+            const moreBtn = document.getElementById("more-btn");
+            if (moreBtn) {
+                moreBtn.style.display = "inline-block";
+            }
         });
 }
 
